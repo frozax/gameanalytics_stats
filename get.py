@@ -1,6 +1,7 @@
 import os
+import sys
 
-file_with_raw_links = "../../dl.txt.txt"
+file_with_raw_links = sys.argv[1]
 for line in open(file_with_raw_links).readlines():
     line = line.strip()
     dest_name = line.split('/')[-1].split('?')[0]
