@@ -1,12 +1,30 @@
 import os
 import json
 
+
+class Event:
+    def __init__(self, name, timestamp, session_num):
+        self.name = name
+        self.timestamp = timestamp
+        self.session_num = session_num
+
+    def __repr__(self):
+        return "{%s %s %s}\n" % (self.name, self.timestamp, self.session_num)
+
+
 class ClientData:
     def __init__(self, client_id):
         self.id = client_id
+        self.events = []
 
-    def raw(self):
-        return "{id: %s}" % (self.id)
+    def __repr__(self):
+        s = "{id: %s}\n" % (self.id)
+        for e in self.events:
+            s += "  %s" % e
+        return s
+
+    def add_event(self, event):
+        self.events.append(event)
 
 
 def client_data_generator(file_with_client_data):
@@ -19,5 +37,6 @@ def client_data_generator(file_with_client_data):
             if cur_cd:
                 yield cur_cd
             cur_cd = ClientData(client_id)
+        cur_cd.add_event(Event(event, ts, session_num))
     if cur_cd:
         yield cur_cd
