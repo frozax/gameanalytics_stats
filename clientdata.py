@@ -1,4 +1,3 @@
-import os
 import json
 
 
@@ -28,7 +27,6 @@ class ClientData:
 
 
 def client_data_generator(file_with_client_data):
-    l = []
     cur_cd = None
     for line in open(file_with_client_data):
         parsed = json.loads(line)
