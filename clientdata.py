@@ -8,22 +8,30 @@ class Event:
         self.session_num = session_num
 
     def __repr__(self):
-        return "{%s %s %s}\n" % (self.name, self.timestamp, self.session_num)
+        return "{%s %s %s}" % (self.name, self.timestamp, self.session_num)
 
 
 class ClientData:
     def __init__(self, client_id):
         self.id = client_id
         self.events = []
+        self.stats = {}
 
     def __repr__(self):
         s = "{id: %s}\n" % (self.id)
+        s += "Stats:\n"
+        for stat in self.stats:
+            s += "  %s: %s\n" % (stat, self.stats[stat])
+        s += "Events:\n"
         for e in self.events:
-            s += "  %s" % e
+            s += "  %s\n" % e
         return s
 
     def add_event(self, event):
         self.events.append(event)
+
+    def compute_stats(self):
+        self.stats["test"] = 0
 
 
 def client_data_generator(file_with_client_data):
