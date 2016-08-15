@@ -19,14 +19,24 @@ class ClientData:
         self.stats = {}
 
     def __repr__(self):
-        s = "{id: %s}\n" % (self.id)
-        s += "Stats:\n"
-        for stat in self.stats:
-            s += "  %s: %s\n" % (stat, self.stats[stat])
-        s += "Events:\n"
-        for e in self.events:
-            s += "  %s\n" % e
+        return self._gen_dump_string()
+
+    def _gen_dump_string(self, id_=True, stats=True, events=True):
+        s = ""
+        if id_:
+            s += "{id: %s}\n" % (self.id)
+        if stats:
+            s += "Stats:\n"
+            for stat in self.stats:
+                s += "  %s: %s\n" % (stat, self.stats[stat])
+        if events:
+            s += "Events:\n"
+            for e in self.events:
+                s += "  %s\n" % e
         return s
+
+    def dump(self, id_=True, stats=True, events=True):
+        print(self._gen_dump_string(id_, stats, events))
 
     def add_event(self, event):
         self.events.append(event)

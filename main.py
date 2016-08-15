@@ -8,7 +8,8 @@ nbc = 0
 cdg = client_data_generator(f)
 for c in cdg:
     c.compute_stats()
-    print(c)
+    c.dump(events=False)
+    #print(c)
     nbc += 1
-    if nbc > 5:
+    if nbc > 60:
         break
