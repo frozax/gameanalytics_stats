@@ -10,11 +10,11 @@ def count_by_value(res, stat):
     return res
 
 
-def aggregate_cd(res, client_data):
+def aggregate_cd(res, client_stats):
     if res is None:
         res = {}
     CONFS = [("tuto_last_event", count_by_value)]
     for key, func in CONFS:
-        res[key] = func(res.get(key), client_data.stats.get(key, "-"))
+        res[key] = func(res.get(key), client_stats.get(key, "-"))
 
     return res

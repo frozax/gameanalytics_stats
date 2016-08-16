@@ -1,5 +1,4 @@
 #́!/usr/bin/env python
-import sys
 import json
 import argparse
 
@@ -33,3 +32,8 @@ if args.command == "ga-data":
         if nbc > 60:
             break
     fstats.close()
+elif args.command == "stats-agg":
+    res = None
+    for l in open(args.stats_file):
+        res = aggregate_cd(res, json.loads(l))
+    json.dump(res, open(args.final_file, "wt"), sort_keys=True, indent=2)
