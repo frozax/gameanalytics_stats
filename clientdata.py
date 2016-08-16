@@ -43,7 +43,6 @@ class ClientData:
 
     def compute_stats(self):
         self.stats.update(tutorial_stats(self.events))
-        self.stats["test"] = 0
 
 
 def client_data_generator(file_with_client_data):
