@@ -3,10 +3,11 @@ from tutorial import tutorial_stats
 
 
 class Event:
-    def __init__(self, name, timestamp, session_num):
+    def __init__(self, name, timestamp, session_num, version):
         self.name = name.split(':')
         self.timestamp = timestamp
         self.session_num = session_num
+        self.version = version
 
     def __repr__(self):
         return "%s %s %s" % (self.name, self.timestamp, self.session_num)
@@ -43,6 +44,7 @@ class ClientData:
 
     def compute_stats(self):
         self.stats.update(tutorial_stats(self.events))
+        self.stats["initial_version"] = self.events[0].version
 
 
 def client_data_generator(file_with_client_data):
@@ -54,6 +56,6 @@ def client_data_generator(file_with_client_data):
             if cur_cd:
                 yield cur_cd
             cur_cd = ClientData(client_id)
-        cur_cd.add_event(Event(event_str, ts, session_num))
+        cur_cd.add_event(Event(event_str, ts, session_num, version))
     if cur_cd:
         yield cur_cd
