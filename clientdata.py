@@ -1,5 +1,6 @@
 import json
 from tutorial import tutorial_stats
+from activity import activity_stats
 
 
 class Event:
@@ -44,6 +45,7 @@ class ClientData:
 
     def compute_stats(self):
         self.stats.update(tutorial_stats(self.events))
+        self.stats.update(activity_stats(self.events))
         self.stats["initial_version"] = self.events[0].version
 
 
