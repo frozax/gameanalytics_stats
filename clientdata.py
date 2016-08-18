@@ -1,6 +1,7 @@
 import json
 from tutorial import tutorial_stats
 from activity import activity_stats, completion_stats
+from mainmenu import mainmenu_stats
 
 
 class Event:
@@ -47,6 +48,7 @@ class ClientData:
         self.stats.update(tutorial_stats(self.events))
         self.stats.update(activity_stats(self.events))
         self.stats.update(completion_stats(self.events))
+        self.stats.update(mainmenu_stats(self.events))
         self.stats["initial_version"] = self.events[0].version
 
 
