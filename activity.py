@@ -16,6 +16,7 @@ def completion_stats(events):
     r = {}
 
     level_found, pack_found = False, False
+    r["latest_completed_level"] = r["latest_completed_pack"] = "none"
     for e in reversed(events):
         if not level_found and e.name[0:2] == ["level", "end"]:
             r["latest_completed_level"] = ' '.join(e.name[2:4])
