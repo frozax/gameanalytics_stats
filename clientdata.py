@@ -5,6 +5,19 @@ from mainmenu import mainmenu_stats
 from purchase import purchase_stats
 
 
+class InitialPurchase:
+    def __init__(self, event_id, event):
+        self.event_id = event_id
+        self.event = event
+
+    @property
+    def item(self):
+        return self.event.name[1]
+
+    def __repr__(self):
+        return "%s %s %s" % (self.item, self.event_id, self.event)
+
+
 class Event:
     def __init__(self, name, timestamp, session_num, version):
         self.name = name.split(':')
@@ -46,12 +59,21 @@ class ClientData:
         self.events.append(event)
 
     def compute_stats(self):
+        self.initial_purchase = self.find_initial_purchase()
         self.stats.update(tutorial_stats(self.events))
         self.stats.update(activity_stats(self.events))
         self.stats.update(completion_stats(self.events))
         self.stats.update(mainmenu_stats(self.events))
         self.stats.update(purchase_stats(self.events))
         self.stats["initial_version"] = self.events[0].version
+
+    def find_initial_purchase(self):
+        for i, e in enumerate(self.events):
+            if e.name[0:2] == ["all", "all_packs"]:
+                return InitialPurchase(i, e)
+            elif e.name[0] == "pack" and e.name[:4] == "pack":
+                return InitialPurchase(i, e)
+        return None
 
 
 def client_data_generator(file_with_client_data):
