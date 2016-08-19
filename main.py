@@ -26,10 +26,8 @@ if args.command == "ga-data":
         d = c.stats
         d.update({"id": c.id})
         fstats.write(json.dumps(d) + "\n")
-        #c.dump(events=False)
-        #print(c)
         nbc += 1
-        if nbc > 60:
+        if nbc > 150:
             break
     fstats.close()
 elif args.command == "stats-agg":
