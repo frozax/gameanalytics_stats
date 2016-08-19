@@ -25,6 +25,12 @@ class Event:
         self.session_num = session_num
         self.version = version
 
+    def level_completed_event(self):
+        return self.name[0:2] == ["level", "end"]
+
+    def pack_completed_event(self):
+        return self.name[0:2] == ["pack", "end"]
+
     def __repr__(self):
         return "%s %s %s" % (self.name, self.timestamp, self.session_num)
 
@@ -64,7 +70,7 @@ class ClientData:
         self.stats.update(activity_stats(self.events))
         self.stats.update(completion_stats(self.events))
         self.stats.update(mainmenu_stats(self.events))
-        self.stats.update(purchase_stats(self.events))
+        self.stats.update(purchase_stats(self.initial_purchase, self.events))
         self.stats["initial_version"] = self.events[0].version
 
     def find_initial_purchase(self):
