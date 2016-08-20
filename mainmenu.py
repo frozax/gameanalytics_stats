@@ -1,7 +1,7 @@
 def mainmenu_stats(events):
     r = {}
     r["sound"] = "on_untouched"
-    options = ["more_options", "more_games", "twitter", "facebook", "mail"]
+    options = ["more_options", "more_games", "twitter", "facebook", "mail", "infos"]
     for o in options:
         r[o] = "no"
     for e in reversed(events):
