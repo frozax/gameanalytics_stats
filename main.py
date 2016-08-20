@@ -15,7 +15,6 @@ stats_parser = subparsers.add_parser("stats-agg")
 stats_parser.add_argument("stats_file")
 stats_parser.add_argument("final_file")
 args = parser.parse_args()
-print(args)
 
 if args.command == "ga-data":
     nbc = 0
