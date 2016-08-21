@@ -5,9 +5,9 @@ def mainmenu_stats(events):
     for o in options:
         r[o] = "no"
     for e in reversed(events):
-        if e.name[:3] == ["ui", "mainmenu", "sound"]:
+        if e.name[0] == "ui" and e.name[2] == "sound":
             if r["sound"] == "on_untouched":
-                r["sound"] = e.name[3]
+                r["sound"] = e.name[3] + " " + e.name[1]
         elif e.name[:2] == ["ui", "mainmenu"] and e.name[2] in options:
             r[o] = "yes"
 
