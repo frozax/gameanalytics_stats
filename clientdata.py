@@ -1,7 +1,7 @@
 import json
 from tutorial import tutorial_stats
 from activity import activity_stats, completion_stats
-from mainmenu import mainmenu_stats
+from mainmenu import mainmenu_stats, ingamemenu_stats
 from purchase import purchase_stats
 from rate import rate_stats
 
@@ -71,6 +71,7 @@ class ClientData:
         self.stats.update(activity_stats(self.events))
         self.stats.update(completion_stats(self.events))
         self.stats.update(mainmenu_stats(self.events))
+        self.stats.update(ingamemenu_stats(self.events))
         self.stats.update(purchase_stats(self.initial_purchase, self.events))
         self.stats.update(rate_stats(self.events))
         self.stats["initial_version"] = self.events[0].version

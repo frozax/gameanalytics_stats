@@ -12,3 +12,9 @@ def mainmenu_stats(events):
             r[o] = "yes"
 
     return r
+
+
+def ingamemenu_stats(events):
+    r = {}
+
+    return r
