@@ -22,6 +22,6 @@ def ingamemenu_stats(events):
             if e.name[3] != "ask":
                 if "retry_yes" not in r:
                     r["retry_yes"] = r["retry_no"] = 0
-            r["retry_" + e.name[3]] += 1
+                r["retry_" + e.name[3]] += 1
 
     return r

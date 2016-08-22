@@ -3,7 +3,7 @@ def purchase_stats(initial_purchase, events):
     if initial_purchase:
         ts_first_purchase = initial_purchase.event.timestamp
         ts_first_run = events[0].timestamp
-        r["days_before_purchase"] = int(ts_first_purchase - ts_first_run / 3600 / 24)
+        r["days_before_purchase"] = int((ts_first_purchase - ts_first_run) / 3600 / 24)
         r["levels_completed_before_first_purchase"] = r["packs_completed_before_first_purchase"] = 0
         for i in range(initial_purchase.event_id):
             e = events[i]

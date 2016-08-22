@@ -1,7 +1,7 @@
 def count_by_value(res, client_stats, key):
     """group by value of stat value stored in 'key'
     """
-    stat = client_stats.get(key, "-")
+    stat = str(client_stats.get(key, "-"))
     if res is None:
         res = {}
     if stat not in res:
@@ -57,6 +57,8 @@ def aggregate_cd(res, client_stats):
         res = {}
     CONFS = [
         ("tuto_last_event", count_by_value, ("tuto_last_event",)),
+        ("days_before_purchase", count_by_value, ("days_before_purchase",)),
+        ("levels_completed_before_purchase", count_by_value, ("levels_completed_before_first_purchase",)),
         ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
         ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ]
