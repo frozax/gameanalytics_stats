@@ -1,4 +1,6 @@
 # gameanalytics_stats
+TODO: identifier les clients id qui sont mes appareils de dev.
+
 Scripts to extract statistics from raw game analytics date
 
 -: not done
@@ -6,7 +8,7 @@ Scripts to extract statistics from raw game analytics date
 X: all done
 
 X tuto: exit (skip or done)
-+ 2 levels completed
++ 2, 3, 4, 5 levels completed
 + hint per level completed (per pack, when pack completed)
 X pack x completed depending on game update
 X time until first purchase
