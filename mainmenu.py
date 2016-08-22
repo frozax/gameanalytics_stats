@@ -17,4 +17,11 @@ def mainmenu_stats(events):
 def ingamemenu_stats(events):
     r = {}
 
+    for e in events:
+        if e.name[:3] == ["ui", "game", "retry"]:
+            if e.name[3] != "ask":
+                if "retry_yes" not in r:
+                    r["retry_yes"] = r["retry_no"] = 0
+            r["retry_" + e.name[3]] += 1
+
     return r
