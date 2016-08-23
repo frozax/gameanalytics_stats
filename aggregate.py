@@ -52,6 +52,12 @@ def retry_no_per_version(client_stats):
     return client_stats.get("initial_version", "-") + " no", client_stats.get("retry_no", 0)
 
 
+def completed_at_least_n_levels(n):
+    def completed_at_least(client_stats):
+        return "yes" if client_stats.get("completed_levels", 0) >= n else "no"
+    return completed_at_least
+
+
 def aggregate_cd(res, client_stats):
     if res is None:
         res = {}
@@ -62,6 +68,8 @@ def aggregate_cd(res, client_stats):
         ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
         ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ]
+    for l in range(2, 5 + 1):
+        CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
     for key, func, args in CONFS:
         res[key] = func(res.get(key), client_stats, *args)
 

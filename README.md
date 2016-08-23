@@ -8,7 +8,7 @@ Scripts to extract statistics from raw game analytics date
 X: all done
 
 X tuto: exit (skip or done)
-+ 2, 3, 4, 5 levels completed
+X 2, 3, 4, 5 levels completed
 + hint per level completed (per pack, when pack completed)
 X pack x completed depending on game update
 X time until first purchase
