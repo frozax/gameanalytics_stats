@@ -10,6 +10,7 @@ def count_by_value(res, client_stats, key):
         res[stat] += 1
     return res
 
+
 def count_by_lambda(res, client_stats, funcs):
     """group by value returnedby function
     applied to stats. ignore if None
@@ -31,13 +32,16 @@ def sum_by_func(res, client_stats, funcs):
     if not isinstance(funcs, list):
         funcs = [funcs]
     for func in funcs:
-        key = func.__name__
         k, v = func(client_stats)
         if k not in res:
             res[k] = v
         else:
             res[k] += v
     return res
+
+
+def sound_state(client_stats):
+    return client_stats.get("initial_version", "-") + " " + client_stats.get("sound", "-")
 
 
 def completed_any_pack_per_version(client_stats):
@@ -68,6 +72,7 @@ def aggregate_cd(res, client_stats):
         ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
         ("rate_ok", count_by_value, ("rate_ok",)),
         ("rate_later", count_by_value, ("rate_later",)),
+        ("sound", count_by_lambda, (sound_state,)),
         ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ]
     for l in range(2, 5 + 1):
