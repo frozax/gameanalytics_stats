@@ -23,10 +23,5 @@ def ingamemenu_stats(events):
                 if "retry_yes" not in r:
                     r["retry_yes"] = r["retry_no"] = 0
                 r["retry_" + e.name[3]] += 1
-        elif e.name == ["ui", "game", "hint"]:
-            if "hints_used" not in r:
-                r["hints_used"] = 0
-            r["hints_used"] += 1
-
 
     return r

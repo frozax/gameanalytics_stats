@@ -3,7 +3,7 @@ import json
 import argparse
 
 from clientdata import client_data_generator
-from aggregate import aggregate_cd
+from aggregate import aggregate_cd, aggregate_second_pass
 
 
 parser = argparse.ArgumentParser(description="stats")
@@ -50,4 +50,5 @@ elif args.command == "stats-agg":
     res = None
     for l in open(args.stats_file):
         res = aggregate_cd(res, json.loads(l))
+    aggregate_second_pass(res)
     json.dump(res, open(args.final_file, "wt"), sort_keys=True, indent=2)

@@ -62,22 +62,45 @@ def completed_at_least_n_levels(n):
     return completed_at_least
 
 
+def pct_completed_with_hints(client_stats):
+    if client_stats.get("completed_levels", 0) < 10:
+        return None
+    hint = client_stats.get("levels_with_hints", 0)
+    no_hint = client_stats.get("levels_without_hints", 0)
+    return "%0.1f" % (hint / (no_hint + hint))
+
+
+CONFS = [
+    ("tuto_last_event", count_by_value, ("tuto_last_event",)),
+    ("days_before_purchase", count_by_value, ("days_before_purchase",)),
+    ("levels_completed_before_purchase", count_by_value, ("levels_completed_before_first_purchase",)),
+    ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
+    ("rate_ok", count_by_value, ("rate_ok",)),
+    ("rate_later", count_by_value, ("rate_later",)),
+    ("sound", count_by_lambda, (sound_state,)),
+    ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
+    ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
+]
+for l in range(2, 5 + 1):
+    CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
+
+
 def aggregate_cd(res, client_stats):
     if res is None:
-        res = {}
-    CONFS = [
-        ("tuto_last_event", count_by_value, ("tuto_last_event",)),
-        ("days_before_purchase", count_by_value, ("days_before_purchase",)),
-        ("levels_completed_before_purchase", count_by_value, ("levels_completed_before_first_purchase",)),
-        ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
-        ("rate_ok", count_by_value, ("rate_ok",)),
-        ("rate_later", count_by_value, ("rate_later",)),
-        ("sound", count_by_lambda, (sound_state,)),
-        ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
-    ]
-    for l in range(2, 5 + 1):
-        CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
+        res = {"hints": {}}
     for key, func, args in CONFS:
         res[key] = func(res.get(key), client_stats, *args)
+    hints = client_stats.get("hints", {})
+    if client_stats.get("completed_levels", 0) >= 10:
+        for k, v in hints.items():
+            if k not in res["hints"]:
+                res["hints"][k] = [0, 0]
+            res["hints"][k][0 if v else 1] += 1
 
     return res
+
+
+def aggregate_second_pass(res):
+    for k in res["hints"]:
+        hint, no_hint = res["hints"][k]
+        res["hints"][k].append(hint / (hint + no_hint))
