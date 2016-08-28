@@ -137,6 +137,7 @@ for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos", "more_opti
 for active in [True, False]:
     CONFS.append(("pack_completed_%s" % ("active" if active else "notactive"), count_by_lambda, (pack_completed_active(active),)))
 
+
 def aggregate_cd(res, client_stats):
     if res is None:
         res = {"hints": {}, "undos": {}, "retries": {}}
