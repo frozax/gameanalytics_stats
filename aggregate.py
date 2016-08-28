@@ -132,7 +132,7 @@ CONFS = [
 for l in range(1, 5 + 1):
     for tuto_done in [True, False]:
         CONFS.append(("at_least_%d_levels_completed_tuto_%s" % (l, "done" if tuto_done else "notdone"), count_by_lambda, (completed_at_least_n_levels(l, tuto_done),)))
-for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos"]:
+for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos", "more_options"]:
     CONFS.append(("clicked_on_%s" % ui_elem, count_by_value, (ui_elem,)))
 for active in [True, False]:
     CONFS.append(("pack_completed_%s" % ("active" if active else "notactive"), count_by_lambda, (pack_completed_active(active),)))
