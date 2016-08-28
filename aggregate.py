@@ -57,16 +57,24 @@ def completed_any_pack_per_version(client_stats):
 
 
 def retry_yes_per_version(client_stats):
+    if client_stats.get("completed_levels", 0) < 10:
+        return "not enough levels completd", 1
     return client_stats.get("initial_version", "-") + " yes", client_stats.get("retry_yes", 0)
 
 
 def retry_no_per_version(client_stats):
+    if client_stats.get("completed_levels", 0) < 10:
+        return "not enough levels completd", 1
     return client_stats.get("initial_version", "-") + " no", client_stats.get("retry_no", 0)
 
 
-def completed_at_least_n_levels(n):
+def completed_at_least_n_levels(n, tuto_done):
     def completed_at_least(client_stats):
+        client_tuto_done = client_stats.get("tuto_last_event") == "completed/done"
+        if tuto_done != client_tuto_done:
+            return "not_proper_tuto_done_value"
         return "yes" if client_stats.get("completed_levels", 0) >= n else "no"
+
     return completed_at_least
 
 
@@ -104,11 +112,11 @@ CONFS = [
     ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
     ("pct_of_levels_completed_with_undos", count_by_lambda, (pct_completed_with_undos,)),
 ]
-for l in range(2, 5 + 1):
-    CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
+for l in range(1, 5 + 1):
+    for tuto_done in [True, False]:
+        CONFS.append(("at_least_%d_levels_completed_tuto_%s" % (l, "done" if tuto_done else "notdone"), count_by_lambda, (completed_at_least_n_levels(l, tuto_done),)))
 for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos"]:
     CONFS.append(("clicked_on_%s" % ui_elem, count_by_value, (ui_elem,)))
-
 
 def aggregate_cd(res, client_stats):
     if res is None:
