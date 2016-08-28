@@ -20,15 +20,15 @@ def completion_stats(events):
     r["latest_completed_level"] = r["latest_completed_pack"] = "none"
     r["completed_packs"] = r["completed_levels"] = 0
     r["hints"] = {}
-    r["levels_with_hints"] = 0
-    r["levels_without_hints"] = 0
+    r["undos"] = {}
     for e in reversed(events):
         if e.level_completed_event():
             # we know if the previously last level didn't use hints if it's not
             # set
+            if latest_level and latest_level not in r["undos"]:
+                r["undos"][latest_level] = False
             if latest_level and latest_level not in r["hints"]:
                 r["hints"][latest_level] = False
-                r["levels_without_hints"] += 1
             latest_level = ' '.join(e.name[2:4])
             r["completed_levels"] += 1
             if not level_found:
@@ -40,8 +40,15 @@ def completion_stats(events):
                 r["latest_completed_pack"] = e.name[2]
                 pack_found = True
         elif e.hint():
-            if latest_level and latest_level not in r["hints"]:
+            if latest_level:
                 r["hints"][latest_level] = True
-                r["levels_with_hints"] += 1
+        elif e.undo():
+            if latest_level:
+                r["undos"][latest_level] = True
+
+    r["levels_with_hints"] = len([a for a in r["hints"].keys() if r["hints"][a]])
+    r["levels_without_hints"] = len([a for a in r["hints"].keys() if not r["hints"][a]])
+    r["levels_with_undos"] = len([a for a in r["undos"].keys() if r["undos"][a]])
+    r["levels_without_undos"] = len([a for a in r["undos"].keys() if not r["undos"][a]])
 
     return r

@@ -35,6 +35,9 @@ class Event:
     def hint(self):
         return self.name[0:3] == ["ui", "game", "hint"]
 
+    def undo(self):
+        return self.name[0:3] == ["ui", "game", "undo"]
+
     def __repr__(self):
         return "%s %s %s" % (self.name, self.timestamp, self.session_num)
 

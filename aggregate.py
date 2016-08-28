@@ -72,10 +72,20 @@ def completed_at_least_n_levels(n):
 
 def pct_completed_with_hints(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return None
+        return "not enough levels completd"
     hint = client_stats.get("levels_with_hints", 0)
     no_hint = client_stats.get("levels_without_hints", 0)
-    return "%0.1f" % (hint / (no_hint + hint))
+    return "%0.2f" % (hint / (no_hint + hint))
+
+
+def pct_completed_with_undos(client_stats):
+    if client_stats.get("completed_levels", 0) < 10:
+        return "not enough levels completd"
+    if client_stats.get("initial_version", "-") != "1.3":
+        return "invalid version"
+    undo = client_stats.get("levels_with_undos", 0)
+    no_undo = client_stats.get("levels_without_undos", 0)
+    return "%0.2f" % (undo / (no_undo + undo))
 
 
 CONFS = [
@@ -92,6 +102,7 @@ CONFS = [
     ("sound", count_by_lambda, (sound_state,)),
     ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
+    ("pct_of_levels_completed_with_undos", count_by_lambda, (pct_completed_with_undos,)),
 ]
 for l in range(2, 5 + 1):
     CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
