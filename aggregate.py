@@ -78,6 +78,14 @@ def completed_at_least_n_levels(n, tuto_done):
     return completed_at_least
 
 
+def pack_completed_active(active):
+    def pack_completed(client_stats):
+        if active != client_stats.get("active"):
+            return "not_active_state"
+        return client_stats.get("completed_packs")
+    return pack_completed
+
+
 def pct_completed_with_hints(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
         return "not enough levels completd"
@@ -126,6 +134,8 @@ for l in range(1, 5 + 1):
         CONFS.append(("at_least_%d_levels_completed_tuto_%s" % (l, "done" if tuto_done else "notdone"), count_by_lambda, (completed_at_least_n_levels(l, tuto_done),)))
 for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos"]:
     CONFS.append(("clicked_on_%s" % ui_elem, count_by_value, (ui_elem,)))
+for active in [True, False]:
+    CONFS.append(("pack_completed_%s" % ("active" if active else "notactive"), count_by_lambda, (pack_completed_active(active),)))
 
 def aggregate_cd(res, client_stats):
     if res is None:
