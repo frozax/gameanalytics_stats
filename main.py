@@ -25,7 +25,7 @@ if args.command == "ga-data":
     nbc = 0
     cdg = client_data_generator(args.ga_file)
     fstats = open(args.stats_file, "wt")
-    for c in counter.Counter('Processing: ').iter(cdg):
+    for c in counter.Counter('Stating: ').iter(cdg):
         c.compute_stats()
         d = c.stats
         d.update({"id": c.id})
@@ -49,7 +49,7 @@ elif args.command == "remove-ids":
             print("ignored " + client_id)
 elif args.command == "stats-agg":
     res = None
-    for l in open(args.stats_file):
+    for l in counter.Counter('Aggregating: ').iter(open(args.stats_file)):
         res = aggregate_cd(res, json.loads(l))
     aggregate_second_pass(res)
     json.dump(res, open(args.final_file, "wt"), sort_keys=True, indent=2)
