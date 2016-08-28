@@ -1,6 +1,7 @@
 #́!/usr/bin/env python
 import json
 import argparse
+from progress import counter
 
 from clientdata import client_data_generator
 from aggregate import aggregate_cd, aggregate_second_pass
@@ -24,7 +25,7 @@ if args.command == "ga-data":
     nbc = 0
     cdg = client_data_generator(args.ga_file)
     fstats = open(args.stats_file, "wt")
-    for c in cdg:
+    for c in counter.Counter('Processing: ').iter(cdg):
         c.compute_stats()
         d = c.stats
         d.update({"id": c.id})

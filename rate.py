@@ -1,6 +1,6 @@
 def rate_stats(events):
     r = {}
-    
+
     names = ["open", "ok", "later"]
 
     for e in events:
