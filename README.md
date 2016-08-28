@@ -13,7 +13,7 @@ X 2, 3, 4, 5 levels completed
 X pack x completed depending on game update
 X time until first purchase
 X levels completed until first purchase
-+ rating: pct rate answered, rate_ok
++ rating: amongs player that were showed the popup, pct that click OK, pct of LATER clicks, pct of IGNORED popup. number of LATER pressed before the OK.
 X retry (ui:game:retry:ask/yes/no, "level:retry:pack:level"): retry: ratio yes/no dependant nouvelle UI (v1.3? date?, trouver si c'est lié))
 - undo: undo used per completed pack, ou nb levels with undo used, ratio of levels with undo used (que si ver="1.3")
 X sound modifié in game? (ui:game:sound:on/off)

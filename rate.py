@@ -9,6 +9,9 @@ def rate_stats(events):
                 for name in names:
                     r["rate_" + name] = 0
             r["rate_" + e.name[3]] += 1
+            if e.name[3] == "ok":
+                r["rate_later_before_ok"] = r["rate_later"]
+                r["rate_open_before_ok"] = r["rate_open"]
     if "rate_open" in r:
         r["rate_answered"] = 0
         for name in ["ok", "later"]:
