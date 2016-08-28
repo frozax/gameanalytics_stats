@@ -106,6 +106,8 @@ CONFS = [
 ]
 for l in range(2, 5 + 1):
     CONFS.append(("at_least_%d_levels_completed" % l, count_by_lambda, (completed_at_least_n_levels(l),)))
+for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos"]:
+    CONFS.append(("clicked_on_%s" % ui_elem, count_by_value, (ui_elem,)))
 
 
 def aggregate_cd(res, client_stats):
