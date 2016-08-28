@@ -31,7 +31,7 @@ if args.command == "ga-data":
         d.update({"id": c.id})
         fstats.write(json.dumps(d) + "\n")
         nbc += 1
-        if nbc > 150:
+        if nbc > 1000:
             break
     fstats.close()
 elif args.command == "remove-ids":
