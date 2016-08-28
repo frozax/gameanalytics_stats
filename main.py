@@ -30,9 +30,9 @@ if args.command == "ga-data":
         d = c.stats
         d.update({"id": c.id})
         fstats.write(json.dumps(d) + "\n")
-        nbc += 1
-        if nbc > 1000:
-            break
+        #nbc += 1
+        #if nbc > 1000:
+        #    break
     fstats.close()
 elif args.command == "remove-ids":
     ignored_ids = []
