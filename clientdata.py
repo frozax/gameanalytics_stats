@@ -38,6 +38,9 @@ class Event:
     def undo(self):
         return self.name[0:3] == ["ui", "game", "undo"]
 
+    def retry_confirm(self):
+        return self.name[0:4] == ["ui", "game", "retry", "yes"]
+
     def __repr__(self):
         return "%s %s %s" % (self.name, self.timestamp, self.session_num)
 

@@ -96,6 +96,14 @@ def pct_completed_with_undos(client_stats):
     return "%0.2f" % (undo / (no_undo + undo))
 
 
+def pct_completed_with_retries(client_stats):
+    if client_stats.get("completed_levels", 0) < 10:
+        return "not enough levels completd"
+    undo = client_stats.get("levels_with_retries", 0)
+    no_undo = client_stats.get("levels_without_retries", 0)
+    return "%0.2f" % (undo / (no_undo + undo))
+
+
 CONFS = [
     ("tuto_last_event", count_by_value, ("tuto_last_event",)),
     ("days_before_purchase", count_by_value, ("days_before_purchase",)),
@@ -111,6 +119,7 @@ CONFS = [
     ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
     ("pct_of_levels_completed_with_undos", count_by_lambda, (pct_completed_with_undos,)),
+    ("pct_of_levels_completed_with_retries", count_by_lambda, (pct_completed_with_retries,)),
 ]
 for l in range(1, 5 + 1):
     for tuto_done in [True, False]:
@@ -120,20 +129,24 @@ for ui_elem in ["mail", "facebook", "twitter", "more_games", "infos"]:
 
 def aggregate_cd(res, client_stats):
     if res is None:
-        res = {"hints": {}}
+        res = {"hints": {}, "undos": {}, "retries": {}}
     for key, func, args in CONFS:
         res[key] = func(res.get(key), client_stats, *args)
-    hints = client_stats.get("hints", {})
     if client_stats.get("completed_levels", 0) >= 10:
-        for k, v in hints.items():
-            if k not in res["hints"]:
-                res["hints"][k] = [0, 0]
-            res["hints"][k][0 if v else 1] += 1
+        for main_key, req_ver in [("hints", None), ("undos", "1.3"), ("retries", None)]:
+            if req_ver and client_stats.get("initial_version", "-") != req_ver:
+                continue
+            dic = client_stats.get(main_key, {})
+            for k, v in dic.items():
+                if k not in res[main_key]:
+                    res[main_key][k] = [0, 0]
+                res[main_key][k][0 if v else 1] += 1
 
     return res
 
 
 def aggregate_second_pass(res):
-    for k in res["hints"]:
-        hint, no_hint = res["hints"][k]
-        res["hints"][k].append(hint / (hint + no_hint))
+    for main_key in ["hints", "undos", "retries"]:
+        for k in res[main_key]:
+            hint, no_hint = res[main_key][k]
+            res[main_key][k].append(hint / (hint + no_hint))
