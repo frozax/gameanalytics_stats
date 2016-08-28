@@ -9,7 +9,7 @@ def mainmenu_stats(events):
             if r["sound"] == "on_untouched":
                 r["sound"] = e.name[3] + " " + e.name[1]
         elif e.name[:2] == ["ui", "mainmenu"] and e.name[2] in options:
-            r[o] = "yes"
+            r[e.name[2]] = "yes"
 
     return r
 
