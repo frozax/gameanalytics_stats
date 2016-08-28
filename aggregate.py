@@ -75,6 +75,8 @@ CONFS = [
     ("days_before_purchase", count_by_value, ("days_before_purchase",)),
     ("levels_completed_before_purchase", count_by_value, ("levels_completed_before_first_purchase",)),
     ("completed_any_pack_per_version", count_by_lambda, (completed_any_pack_per_version,)),
+    ("rate_later_before_ok", count_by_value, ("rate_later_before_ok",)),
+    ("rate_open_before_ok", count_by_value, ("rate_open_before_ok",)),
     ("rate_ok", count_by_value, ("rate_ok",)),
     ("rate_later", count_by_value, ("rate_later",)),
     ("sound", count_by_lambda, (sound_state,)),
