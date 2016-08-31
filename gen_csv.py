@@ -65,5 +65,18 @@ def completed_at_least():
             values_array.append(data["yes"] / (data["yes"] + data["no"]))
     csv_writer.writerows([["Completed At Least"], titles, values_tuto_done, values_tuto_not_done, []])
 
+
+def specific_packs_completed():
+    pack_names, active, inactive, total = ["pack"], ["active"], ["inactive"], ["total"]
+    spc = agg["specific_packs_completed"]
+    for pack_name in sorted(spc.keys()):
+        p = spc[pack_name]
+        pack_names.append(pack_name)
+        active.append(p[0])
+        inactive.append(p[1])
+        total.append(p[0] + p[1])
+    csv_writer.writerows([["Specific packs completed"], pack_names, active, inactive, total, []])
+
 tuto()
 completed_at_least()
+specific_packs_completed()

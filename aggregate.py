@@ -156,10 +156,9 @@ def aggregate_cd(res, client_stats):
                 res[main_key][k][0 if v else 1] += 1
     for pack in client_stats.get("specific_completed_packs", []):
         if pack not in res["specific_packs_completed"]:
-            res["specific_packs_completed"][pack] = [0, 0, 0]
+            res["specific_packs_completed"][pack] = [0, 0]
         active = client_stats.get("active")
         res["specific_packs_completed"][pack][0 if active else 1] += 1
-        res["specific_packs_completed"][pack][2] += 1
 
     return res
 
