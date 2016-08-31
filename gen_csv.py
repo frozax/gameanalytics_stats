@@ -15,8 +15,9 @@ csv_writer = csv.writer(sys.stdout)
 
 def tuto():
     tle = agg["tuto_last_event"]
-    tle["completed/done"] += tle["completed/interactive_doit"]  # happens if double tap at end of tutorial
-    del tle["completed/interactive_doit"]
+    if "completed/interactive_doit" in tle:
+        tle["completed/done"] += tle["completed/interactive_doit"]  # happens if double tap at end of tutorial
+        del tle["completed/interactive_doit"]
     del tle["-"]
     total = 0
     for k in tle:
@@ -42,8 +43,9 @@ def tuto():
         tuto_keys.append("\"%s\"" % name)
         for i, k in enumerate(keys):
             if k:
-                tuto_values[i].append(tle[k])
-                del tle[k]
+                if k in tle:
+                    tuto_values[i].append(tle[k])
+                    del tle[k]
             else:
                 tuto_values[i].append("")
 
