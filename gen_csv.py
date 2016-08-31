@@ -50,4 +50,18 @@ def tuto():
     csv_writer.writerows([["Tutorial"], tuto_keys, tuto_values[0], tuto_values[1], tuto_values[2], []])
     assert len(tle) == 0
 
+
+def completed_at_least():
+    titles = []
+    values_tuto_done = []
+    values_tuto_not_done = []
+    for nblevels in range(5):
+        key_format = "at_least_" + str(nblevels + 1) + "_levels_completed_tuto_%sdone"
+        titles.append("Completed at least %d levels" % (nblevels + 1))
+        for tuto_val, values_array in [("", values_tuto_done), ("not", values_tuto_not_done)]:
+            data = agg[key_format % tuto_val]
+            values_array.append(data["yes"] / (data["yes"] + data["no"]))
+    csv_writer.writerows([["Completed At Least"], titles, values_tuto_done, values_tuto_not_done, []])
+
 tuto()
+completed_at_least()

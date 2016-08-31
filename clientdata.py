@@ -26,6 +26,9 @@ class Event:
         self.session_num = session_num
         self.version = version
 
+    def level_started_event(self):
+        return self.name[0:2] == ["level", "start"]
+
     def level_completed_event(self):
         return self.name[0:2] == ["level", "end"]
 

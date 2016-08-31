@@ -18,6 +18,7 @@ def completion_stats(events):
     level_found, pack_found = False, False
     latest_level = None
     r["latest_completed_level"] = r["latest_completed_pack"] = "none"
+    r["started_at_least_one_level"] = False
     r["completed_packs"] = r["completed_levels"] = 0
     r["hints"] = {}
     r["undos"] = {}
@@ -38,6 +39,8 @@ def completion_stats(events):
             if not level_found:
                 r["latest_completed_level"] = latest_level
                 level_found = True
+        elif e.level_started_event():
+            r["started_at_least_one_level"] = True
         elif e.pack_completed_event():
             r["completed_packs"] += 1
             if not pack_found:

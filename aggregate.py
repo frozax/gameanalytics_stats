@@ -73,6 +73,8 @@ def completed_at_least_n_levels(n, tuto_done):
         client_tuto_done = client_stats.get("tuto_last_event") == "completed/done"
         if tuto_done != client_tuto_done:
             return "not_proper_tuto_done_value"
+        if not client_stats.get("started_at_least_one_level", False):
+            return "never_tried_playing"
         return "yes" if client_stats.get("completed_levels", 0) >= n else "no"
 
     return completed_at_least
