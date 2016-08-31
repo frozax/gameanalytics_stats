@@ -21,6 +21,7 @@ def completion_stats(events):
     r["started_at_least_one_level"] = False
     r["completed_packs"] = r["completed_levels"] = 0
     r["hints"] = {}
+    r["specific_completed_packs"] = set()
     r["undos"] = {}
     r["retries"] = {}
     for e in reversed(events):
@@ -43,6 +44,7 @@ def completion_stats(events):
             r["started_at_least_one_level"] = True
         elif e.pack_completed_event():
             r["completed_packs"] += 1
+            r["specific_completed_packs"].add(e.name[2])
             if not pack_found:
                 r["latest_completed_pack"] = e.name[2]
                 pack_found = True
@@ -62,5 +64,6 @@ def completion_stats(events):
     r["levels_without_undos"] = len([a for a in r["undos"].keys() if not r["undos"][a]])
     r["levels_with_retries"] = len([a for a in r["retries"].keys() if r["retries"][a]])
     r["levels_without_retries"] = len([a for a in r["retries"].keys() if not r["retries"][a]])
+    r["specific_completed_packs"] = sorted(list(r["specific_completed_packs"]))  # can't serialize sets
 
     return r
