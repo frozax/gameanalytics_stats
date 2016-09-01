@@ -78,25 +78,32 @@ def specific_packs_completed():
     csv_writer.writerows([["Specific packs completed"], pack_names, active, inactive, total, []])
 
 
-def days_before_purchase():
-    dbp = agg["days_before_purchase"]
-    max_days = max([int(a) for a in dbp.keys() if a != "-"])
-    day_ranges, values = [], []
-    def day_to_range(d, step=10):
+def days_levels_before_purchase():
+    def value_to_range(d, step=10, max_=None):
+        over_max = False
+        if max_ is not None and d >= max_:
+            over_max = True
+            d = max_
         start_range = d - d % step
         end_range = start_range + (step - 1)
-        return "%d..%d" % (start_range, end_range)
-    for d in range(max_days + 1):
-        r = day_to_range(d)
-        if r not in day_ranges:
-            day_ranges.append(r)
-            values.append(0)
-        values[day_ranges.index(r)] += dbp.get(str(d), 0)
+        return ("%d..%d" % (start_range, end_range)) if not over_max else ("%d+" % start_range)
 
-    csv_writer.writerows([["Days before purchase"], day_ranges, values, []])
+    for agg_key, step, max_range in [("days_before_purchase", 10, None), ("levels_completed_before_purchase", 20, 260)]:
+        dbp = agg[agg_key]
+        max_value = max([int(a) for a in dbp.keys() if a != "-"])
+        ranges, values = [], []
+
+        for v in range(max_value + 1):
+            r = value_to_range(v, step=step, max_=max_range)
+            if r not in ranges:
+                ranges.append(r)
+                values.append(0)
+            values[ranges.index(r)] += dbp.get(str(v), 0)
+
+        csv_writer.writerows([[agg_key], ranges, values, []])
 
 
 tuto()
 completed_at_least()
 specific_packs_completed()
-days_before_purchase()
+days_levels_before_purchase()
