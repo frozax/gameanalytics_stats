@@ -41,7 +41,12 @@ def sum_by_func(res, client_stats, funcs):
 
 
 def sound_state(client_stats):
-    return client_stats.get("initial_version", "-") + " " + client_stats.get("sound", "-")
+    v = client_stats.get("initial_version", "-")
+    if v != client_stats.get("sound_version_latest_event", v):  # player updated during lifetime, ignore it
+        return "version change"
+    s = client_stats.get("sound", "-")
+    state = v + " " + s
+    return state
 
 
 def rate_was_oked_at_least_once(client_stats):
