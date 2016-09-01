@@ -74,13 +74,13 @@ def completed_any_pack_per_version(client_stats):
 
 def retry_yes_per_version(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return "not enough levels completd", 1
+        return "not enough levels completed", 1
     return client_stats.get("initial_version", "-") + " yes", client_stats.get("retry_yes", 0)
 
 
 def retry_no_per_version(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return "not enough levels completd", 1
+        return "not enough levels completed", 1
     return client_stats.get("initial_version", "-") + " no", client_stats.get("retry_no", 0)
 
 
@@ -106,7 +106,7 @@ def pack_completed_active(active):
 
 def pct_completed_with_hints(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return "not enough levels completd"
+        return "not enough levels completed"
     hint = client_stats.get("levels_with_hints", 0)
     no_hint = client_stats.get("levels_without_hints", 0)
     return "%0.2f" % (hint / (no_hint + hint))
@@ -114,7 +114,7 @@ def pct_completed_with_hints(client_stats):
 
 def pct_completed_with_undos(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return "not enough levels completd"
+        return "not enough levels completed"
     if client_stats.get("initial_version", "-") != "1.3":
         return "invalid version"
     undo = client_stats.get("levels_with_undos", 0)
@@ -124,7 +124,7 @@ def pct_completed_with_undos(client_stats):
 
 def pct_completed_with_retries(client_stats):
     if client_stats.get("completed_levels", 0) < 10:
-        return "not enough levels completd"
+        return "not enough levels completed"
     undo = client_stats.get("levels_with_retries", 0)
     no_undo = client_stats.get("levels_without_retries", 0)
     return "%0.2f" % (undo / (no_undo + undo))
