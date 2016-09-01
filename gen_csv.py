@@ -78,23 +78,36 @@ def specific_packs_completed():
     csv_writer.writerows([["Specific packs completed"], pack_names, active, inactive, total, []])
 
 
-def days_levels_before_purchase():
-    def value_to_range(d, step=10, max_=None):
-        over_max = False
-        if max_ is not None and d >= max_:
-            over_max = True
-            d = max_
-        start_range = d - d % step
-        end_range = start_range + (step - 1)
-        return ("%d..%d" % (start_range, end_range)) if not over_max else ("%d+" % start_range)
+def value_to_range(d, step=10, max_=None, zero_is_alone=False):
+    over_max = False
+    if max_ is not None and d >= max_:
+        over_max = True
+        d = max_
+    start_range = d - d % step
+    if zero_is_alone and start_range == 0:
+        return "0"
+    if over_max:
+        return "%d+" % start_range
 
-    for agg_key, step, max_range in [("days_before_purchase", 10, None), ("levels_completed_before_purchase", 20, 260)]:
+    end_range = start_range + (step - 1)
+    return ("%d..%d" % (start_range, end_range))
+
+def values_to_ranges():
+    for agg_key, step, max_range, zero_is_alone in [("days_before_purchase", 10, None, False),
+                                     ("levels_completed_before_purchase", 20, 260, False),
+                                     ("rate_later_before_ok", 5, None, False),
+                                     ("rate_open_before_ok", 10, None, False),
+                                     ("pct_of_levels_completed_with_hints", 10, 100, True),
+                                     ("pct_of_levels_completed_with_undos", 10, 100, True),
+                                     ("pct_of_levels_completed_with_retries", 10, 100, True),
+                                     ]:
         dbp = agg[agg_key]
-        max_value = max([int(a) for a in dbp.keys() if a != "-"])
+        ignored_keys = ["-", "not enough levels completed", "invalid version"]
+        max_value = max([int(a) for a in dbp.keys() if a not in ignored_keys])
         ranges, values = [], []
 
         for v in range(max_value + 1):
-            r = value_to_range(v, step=step, max_=max_range)
+            r = value_to_range(v, step=step, max_=max_range, zero_is_alone=zero_is_alone)
             if r not in ranges:
                 ranges.append(r)
                 values.append(0)
@@ -117,5 +130,5 @@ def rate():
 tuto()
 completed_at_least()
 specific_packs_completed()
-days_levels_before_purchase()
+values_to_ranges()
 rate()
