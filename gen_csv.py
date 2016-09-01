@@ -103,7 +103,19 @@ def days_levels_before_purchase():
         csv_writer.writerows([[agg_key], ranges, values, []])
 
 
+def rate():
+    rcs = agg["rate_click_summary"]
+    csv_writer.writerows([["Rating: option chosen"],
+                          ["None", rcs.get("no_click", 0)],
+                          ["Later", rcs.get("later", 0)],
+                          ["Later & OK", rcs.get("later_ok", 0)],
+                          ["OK", rcs.get("ok", 0)],
+                          []])
+
+
+
 tuto()
 completed_at_least()
 specific_packs_completed()
 days_levels_before_purchase()
+rate()

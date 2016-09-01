@@ -52,6 +52,22 @@ def rate_was_open_at_least_once(client_stats):
     return "yes" if client_stats.get("rate_open", 0) > 0 else "no"
 
 
+def rate_click_summary(client_stats):
+    if client_stats.get("rate_open", 0) > 0:
+        later = client_stats.get("rate_later", 0) > 0
+        ok = client_stats.get("rate_ok", 0) > 0
+        if later and ok:
+            return "later_ok"
+        elif ok:
+            return "ok"
+        elif later:
+            return "later"
+        else:
+            return "no_click"
+    else:
+        return "-"
+
+
 def completed_any_pack_per_version(client_stats):
     return client_stats.get("initial_version", "-") + " " + ("yes" if client_stats.get("completed_packs", 0) > 0 else "no")
 
@@ -125,6 +141,7 @@ CONFS = [
     ("rate_later", count_by_value, ("rate_later",)),
     ("rate_was_open_at_least_once", count_by_lambda, (rate_was_open_at_least_once,)),
     ("rate_was_oked_at_least_once", count_by_lambda, (rate_was_oked_at_least_once,)),
+    ("rate_click_summary", count_by_lambda, (rate_click_summary,)),
     ("sound", count_by_lambda, (sound_state,)),
     ("retry_per_version", sum_by_func, ([retry_yes_per_version, retry_no_per_version],)),
     ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
