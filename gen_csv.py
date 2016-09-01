@@ -136,9 +136,28 @@ def retry():
                           ["1.0", rpv["dev yes"], rpv["dev no"]],
                           []])
 
+
+def mainmenu():
+    options, click_pct = [], []
+    for option in ["more_options", "more_games", "facebook", "twitter", "mail"]:
+        stat = agg["clicked_on_%s" % option]
+        options.append(option)
+        click_pct.append(100 * stat["yes"] / (stat["yes"] + stat["no"]))
+    csv_writer.writerows([["mainmenu options clicked"], options, click_pct, []])
+
+
+def sound():
+    s = agg["sound"]
+    options = ["on_untouched", "on mainmenu", "on game", "off mainmenu", "off game"]
+    for v in ["dev", "1.3"]:
+        csv_writer.writerows([["sound option %s" % v], options, [s["%s %s" % (v, option)] for option in options], []])
+
+
 tuto()
 completed_at_least()
 specific_packs_completed()
 values_to_ranges()
 rate()
 retry()
+mainmenu()
+sound()
