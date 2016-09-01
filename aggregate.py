@@ -109,7 +109,7 @@ def pct_completed_with_hints(client_stats):
         return "not enough levels completed"
     hint = client_stats.get("levels_with_hints", 0)
     no_hint = client_stats.get("levels_without_hints", 0)
-    return "%0.2f" % (hint / (no_hint + hint))
+    return (hint * 100) // (no_hint + hint)
 
 
 def pct_completed_with_undos(client_stats):
@@ -119,7 +119,7 @@ def pct_completed_with_undos(client_stats):
         return "invalid version"
     undo = client_stats.get("levels_with_undos", 0)
     no_undo = client_stats.get("levels_without_undos", 0)
-    return "%0.2f" % (undo / (no_undo + undo))
+    return (undo * 100) // (no_undo + undo)
 
 
 def pct_completed_with_retries(client_stats):
@@ -127,7 +127,7 @@ def pct_completed_with_retries(client_stats):
         return "not enough levels completed"
     undo = client_stats.get("levels_with_retries", 0)
     no_undo = client_stats.get("levels_without_retries", 0)
-    return "%0.2f" % (undo / (no_undo + undo))
+    return (undo * 100) // (no_undo + undo)
 
 
 CONFS = [
