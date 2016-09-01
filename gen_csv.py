@@ -92,6 +92,7 @@ def value_to_range(d, step=10, max_=None, zero_is_alone=False):
     end_range = start_range + (step - 1)
     return ("%d..%d" % (start_range, end_range))
 
+
 def values_to_ranges():
     for agg_key, step, max_range, zero_is_alone in [("days_before_purchase", 10, None, False),
                                      ("levels_completed_before_purchase", 20, 260, False),
@@ -127,8 +128,17 @@ def rate():
 
 
 
+def retry():
+    rpv = agg["retry_per_version"]
+    csv_writer.writerows([["Retry per version"],
+                          ["version", "yes", "no"],
+                          ["1.3", rpv["1.3 yes"], rpv["1.3 no"]],
+                          ["1.0", rpv["dev yes"], rpv["dev no"]],
+                          []])
+
 tuto()
 completed_at_least()
 specific_packs_completed()
 values_to_ranges()
 rate()
+retry()
