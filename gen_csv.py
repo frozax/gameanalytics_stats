@@ -77,6 +77,26 @@ def specific_packs_completed():
         total.append(p[0] + p[1])
     csv_writer.writerows([["Specific packs completed"], pack_names, active, inactive, total, []])
 
+
+def days_before_purchase():
+    dbp = agg["days_before_purchase"]
+    max_days = max([int(a) for a in dbp.keys() if a != "-"])
+    day_ranges, values = [], []
+    def day_to_range(d, step=10):
+        start_range = d - d % step
+        end_range = start_range + (step - 1)
+        return "%d..%d" % (start_range, end_range)
+    for d in range(max_days + 1):
+        r = day_to_range(d)
+        if r not in day_ranges:
+            day_ranges.append(r)
+            values.append(0)
+        values[day_ranges.index(r)] += dbp.get(str(d), 0)
+
+    csv_writer.writerows([["Days before purchase"], day_ranges, values, []])
+
+
 tuto()
 completed_at_least()
 specific_packs_completed()
+days_before_purchase()
