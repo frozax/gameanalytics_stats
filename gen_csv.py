@@ -28,16 +28,16 @@ def tuto():
     steps = [("unknown", ["start/intro_thermonumbers", None, None]),
              ("1. Numbers explanation", [None, "back/intro_thermonumbers", "skip/intro_thermonumbers"]),
              ("2. Filling explanation", [None, "back/intro_fillfrombase", "skip/intro_fillfrombase"]),
-             ("3. Interaction tap", [None, None, "back/interactive_fill"]),
-             ("4. Interaction double-tap", [None, None, "back/interactive_empty"]),
-             ("5. Interaction logic", [None, None, "back/interactive_complex"]),
-             ("6. Interaction complete level", [None, None, "back/interactive_doit"]),
+             ("3. Interaction tap", [None, "back/interactive_fill", None]),
+             ("4. Interaction double-tap", [None, "back/interactive_empty", None]),
+             ("5. Interaction logic", [None, "back/interactive_complex", None]),
+             ("6. Interaction complete level", [None, "back/interactive_doit", None]),
              ("7. Done", ["completed/done", "back/done", None]),
              ("Total", ["total", None, None])
              ]
 
-    tuto_keys = []
-    tuto_values = [[], [], []]
+    tuto_keys = ["step"]
+    tuto_values = [["n/a"], ["back"], ["skip"]]
 
     for name, keys in steps:
         tuto_keys.append("\"%s\"" % name)
@@ -54,9 +54,9 @@ def tuto():
 
 
 def completed_at_least():
-    titles = []
-    values_tuto_done = []
-    values_tuto_not_done = []
+    titles = ["tuto_done"]
+    values_tuto_done = ["yes"]
+    values_tuto_not_done = ["no"]
     for nblevels in range(5):
         key_format = "at_least_" + str(nblevels + 1) + "_levels_completed_tuto_%sdone"
         titles.append("Completed at least %d levels" % (nblevels + 1))
@@ -94,18 +94,18 @@ def value_to_range(d, step=10, max_=None, zero_is_alone=False):
 
 
 def values_to_ranges():
-    for agg_key, step, max_range, zero_is_alone in [("days_before_purchase", 10, None, False),
-                                     ("levels_completed_before_purchase", 20, 260, False),
-                                     ("rate_later_before_ok", 5, None, False),
-                                     ("rate_open_before_ok", 10, None, False),
-                                     ("pct_of_levels_completed_with_hints", 10, 100, True),
-                                     ("pct_of_levels_completed_with_undos", 10, 100, True),
-                                     ("pct_of_levels_completed_with_retries", 10, 100, True),
+    for agg_key, legend, step, max_range, zero_is_alone in [("days_before_purchase", "days", 10, None, False),
+                                     ("levels_completed_before_purchase", "levels", 20, 260, False),
+                                     ("rate_later_before_ok", "later selections", 5, None, False),
+                                     ("rate_open_before_ok", "popups opened", 10, None, False),
+                                     ("pct_of_levels_completed_with_hints", "% hints", 10, 100, True),
+                                     ("pct_of_levels_completed_with_undos", "% levels", 10, 100, True),
+                                     ("pct_of_levels_completed_with_retries", "% retries", 10, 100, True),
                                      ]:
         dbp = agg[agg_key]
         ignored_keys = ["-", "not enough levels completed", "invalid version"]
         max_value = max([int(a) for a in dbp.keys() if a not in ignored_keys])
-        ranges, values = [], []
+        ranges, values = [legend], ["players"]
 
         for v in range(max_value + 1):
             r = value_to_range(v, step=step, max_=max_range, zero_is_alone=zero_is_alone)
@@ -132,14 +132,14 @@ def retry():
     rpv = agg["retry_per_version"]
     csv_writer.writerows([["Retry per version"],
                           ["version", "yes", "no"],
-                          ["1.3", rpv["1.3 yes"], rpv["1.3 no"]],
                           ["1.0", rpv["dev yes"], rpv["dev no"]],
+                          ["1.3", rpv["1.3 yes"], rpv["1.3 no"]],
                           []])
 
 
 def mainmenu():
     options, click_pct = [], []
-    for option in ["more_options", "more_games", "facebook", "twitter", "mail"]:
+    for option in ["more_options", "more_games", "mail", "facebook", "twitter"]:
         stat = agg["clicked_on_%s" % option]
         options.append(option)
         click_pct.append(100 * stat["yes"] / (stat["yes"] + stat["no"]))
