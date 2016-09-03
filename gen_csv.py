@@ -82,20 +82,23 @@ def value_to_range(d, step=10, max_=None, zero_is_alone=False):
         over_max = True
         d = max_
     start_range = d - d % step
-    if zero_is_alone and start_range == 0:
-        return "0"
     if over_max:
         return "%d+" % start_range
 
     end_range = start_range + (step - 1)
+    if zero_is_alone:
+        if start_range == 0:
+            start_range = 1
+        if d == 0:
+            return "\"=0\""
     return ("%d..%d" % (start_range, end_range))
 
 
 def values_to_ranges():
-    for agg_key, legend, step, max_range, zero_is_alone in [("days_before_purchase", "days", 10, None, False),
+    for agg_key, legend, step, max_range, zero_is_alone in [("days_before_purchase", "days", 4, 60, False),
                                      ("levels_completed_before_purchase", "levels", 20, 260, False),
-                                     ("rate_later_before_ok", "later selections", 5, None, False),
-                                     ("rate_open_before_ok", "popups opened", 10, None, False),
+                                     ("rate_later_before_ok", "later selections", 1, 10, False),
+                                     ("rate_open_before_ok", "popups opened", 5, 200, False),
                                      ("pct_of_levels_completed_with_hints", "% hints", 10, 100, True),
                                      ("pct_of_levels_completed_with_undos", "% levels", 10, 100, True),
                                      ("pct_of_levels_completed_with_retries", "% retries", 10, 100, True),
