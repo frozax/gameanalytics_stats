@@ -1,4 +1,4 @@
 # gameanalytics_stats
 
-Scripts to extract statistics from raw game analytics date
+Scripts to extract statistics from raw game analytics data
 
