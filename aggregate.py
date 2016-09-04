@@ -197,8 +197,16 @@ def aggregate_second_pass(res):
         for k in res[main_key]:
             hint, no_hint = res[main_key][k]
             res[main_key][k].append(hint / (hint + no_hint))
+        def filter_key(d):
+            if d == "a_4x4 01":
+                return False
+            if res[main_key][d][0] + res[main_key][d][1] < 50:
+                return False
+            return True
+        keys = filter(filter_key, res[main_key].keys())
+
         def sort_key(d):
             return res[main_key][d][2]
-        most_used = max(res[main_key].keys(), key=sort_key)
+        most_used = max(keys, key=sort_key)
         res["extremes"][main_key + "_most_globally"] = [most_used, res[main_key][most_used]]
 
