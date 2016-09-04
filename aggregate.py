@@ -168,7 +168,7 @@ for active in [True, False]:
 
 def aggregate_cd(res, client_stats):
     if res is None:
-        res = {"hints": {}, "undos": {}, "retries": {}, "specific_packs_completed": {}}
+        res = {"hints": {}, "undos": {}, "retries": {}, "specific_packs_completed": {}, "extremes": {}}
     for key, func, args in CONFS:
         res[key] = func(res.get(key), client_stats, *args)
     if client_stats.get("completed_levels", 0) >= 10:
@@ -186,6 +186,9 @@ def aggregate_cd(res, client_stats):
         active = client_stats.get("active")
         res["specific_packs_completed"][pack][0 if active else 1] += 1
 
+    e = res["extremes"]
+    e["most_levels_played"] = max(e.get("most_levels_played", 0), client_stats.get("completed_levels", 0))
+
     return res
 
 
@@ -194,3 +197,8 @@ def aggregate_second_pass(res):
         for k in res[main_key]:
             hint, no_hint = res[main_key][k]
             res[main_key][k].append(hint / (hint + no_hint))
+        def sort_key(d):
+            return res[main_key][d][2]
+        most_used = max(res[main_key].keys(), key=sort_key)
+        res["extremes"][main_key + "_most_globally"] = [most_used, res[main_key][most_used]]
+
