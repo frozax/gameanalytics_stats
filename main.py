@@ -49,7 +49,9 @@ elif args.command == "remove-ids":
             print("ignored " + client_id)
 elif args.command == "stats-agg":
     res = None
+    c = 0
     for l in counter.Counter('Aggregating: ').iter(open(args.stats_file)):
         res = aggregate_cd(res, json.loads(l))
+        c += 1
     aggregate_second_pass(res)
     json.dump(res, open(args.final_file, "wt"), sort_keys=True, indent=2)
