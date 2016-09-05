@@ -135,6 +135,12 @@ def pct_completed_with_retries(client_stats):
     return (undo * 100) // (no_undo + undo)
 
 
+def completed_the_game_and_paid(client_stats):
+    if client_stats.get("completed_levels", 0) < 250:
+        return "didn't complete the game"
+    return "paid" if client_stats.get("paying", False) else "didntpay"
+
+
 CONFS = [
     ("tuto_last_event", count_by_value, ("tuto_last_event",)),
     ("days_before_purchase", count_by_value, ("days_before_purchase",)),
@@ -152,6 +158,7 @@ CONFS = [
     ("pct_of_levels_completed_with_hints", count_by_lambda, (pct_completed_with_hints,)),
     ("pct_of_levels_completed_with_undos", count_by_lambda, (pct_completed_with_undos,)),
     ("pct_of_levels_completed_with_retries", count_by_lambda, (pct_completed_with_retries,)),
+    ("completed_the_game_and_paid", count_by_lambda, (completed_the_game_and_paid,)),
 ]
 for l in range(1, 5 + 1):
     for tuto_done in [True, False]:

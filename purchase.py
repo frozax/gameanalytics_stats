@@ -1,5 +1,6 @@
 def purchase_stats(initial_purchase, events):
     r = {}
+    r["paying"] = initial_purchase != None
     if initial_purchase:
         ts_first_purchase = initial_purchase.event.timestamp
         ts_first_run = events[0].timestamp
